@@ -1,26 +1,47 @@
 <template>
   <div class="inputBox shadow">
-    <!-- 1. 입력 후 엔터하면 'addTodo' 메서드 실행 -->
     <input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodo" />
-    <!-- 2. 'addContainer'라는 style 적용. 버튼 누를 시 'addTodo' 메서드 실행 -->
     <span class="addContainer" v-on:click="addTodo">
-      <!-- 3. 아이콘 가져오기 -->
       <i class="fa-solid fa-plus addBtn"></i>
     </span>
+    <!-- 1. 모달실행 = true, 닫는조건 = false -->
+    <AlertModal v-if="showModal" @close="showModal = false">
+      <!-- 2. 모달 오버라이딩  -->
+      <h3 slot="header">
+        경고! <i class="closeModalBtn fa-solid fa-x" @click="showModal = false"></i>
+      </h3>
+      <div slot="body">
+        무언가를 입력하세요
+      </div>
+      <div slot="footer">
+        copy right
+      </div>
+    </AlertModal>
   </div>
 </template>
 
 <script>
+// 1. import
+import AlertModal from "./common/AlertModal.vue";
+
+// 2. AlertModal에 대한 설정
 export default {
   data: () => ({
     newTodoItem: "",
+    showModal: false,
   }),
+  components: {
+    AlertModal
+  },
   methods: {
     addTodo() {
-      // 1. 생성
       if (this.newTodoItem !== "") {
-        this.$emit('addTodoItem', this.newTodoItem);    // 2. 보내기
+        this.$emit("addTodoItem", this.newTodoItem);
         this.clearInput();
+      } 
+      // [1]. 없다면 true
+      else {
+        this.showModal = !this.showModal;
       }
     },
     clearInput() {

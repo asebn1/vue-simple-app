@@ -1,11 +1,10 @@
 <template>
   <div class="inputBox shadow">
-
     <!-- 1. 입력 후 엔터하면 'addTodo' 메서드 실행 -->
-    <input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodo"/>
+    <input type="text" v-model="newTodoItem" v-on:keyup.enter="addTodo" />
     <!-- 2. 'addContainer'라는 style 적용. 버튼 누를 시 'addTodo' 메서드 실행 -->
     <span class="addContainer" v-on:click="addTodo">
-    <!-- 3. 아이콘 가져오기 -->
+      <!-- 3. 아이콘 가져오기 -->
       <i class="fa-solid fa-plus addBtn"></i>
     </span>
   </div>
@@ -13,18 +12,20 @@
 
 <script>
 export default {
-  data: function () {
-    return {
-      newTodoItem: "",
-    };
-  },
+  data: () => ({
+    newTodoItem: "",
+  }),
   methods: {
-    addTodo: function () {
-      // 로컬스토리지에 저장한다.
-      localStorage.setItem(this.newTodoItem, this.newTodoItem);
-      this.clearInput();
+    addTodo() {
+      // 1. 생성
+      if (this.newTodoItem !== "") {
+        var obj = { completed: false, item: this.newTodoItem };
+        // 2. 로컬스토리지에 저장한다. 객체를 저장할 때 json String으로 변경해서 저장
+        localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+        this.clearInput();
+      }
     },
-    clearInput: function () {
+    clearInput() {
       this.newTodoItem = "";
     },
   },

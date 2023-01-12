@@ -19,9 +19,7 @@ export default {
     addTodo() {
       // 1. 생성
       if (this.newTodoItem !== "") {
-        var obj = { completed: false, item: this.newTodoItem };
-        // 2. 로컬스토리지에 저장한다. 객체를 저장할 때 json String으로 변경해서 저장
-        localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+        this.$emit('addTodoItem', this.newTodoItem);    // 2. 보내기
         this.clearInput();
       }
     },

@@ -3,28 +3,30 @@
     <!-- 2. 트랜지션 ul 태그로 사용 -->
     <transition-group name="list" tag="ul"> 
     <!-- div: 단순히 묶는 의미. 줄바꿈 O  -->
-      <li v-for="(todoItem, index) in propsdata"  v-bind:key="todoItem.item" class="shadow">
-        <i class="fa-solid fa-check checkBtn" v-bind:class="{checkBtnCompleted: todoItem.completed}" v-on:click="toggleComplete(todoItem, index)"></i>
+      <li v-for="(todoItem, index) in this.getTodoItems"  v-bind:key="todoItem.item" class="shadow">
+        <i class="fa-solid fa-check checkBtn" v-bind:class="{checkBtnCompleted: todoItem.completed}" v-on:click="toggleComplete({todoItem, index})"></i>
         <span v-bind:class="{ textCompleted: todoItem.completed }"> {{ todoItem.item }} </span>
-        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)"> <i class="fa-solid fa-trash"></i> </span>
+        <span class="removeBtn" v-on:click="removeTodo({todoItem, index})"> <i class="fa-solid fa-trash"></i> </span>
       </li>
     </transition-group>
   </div>
 </template>
  
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
-  props: ['propsdata'],
   methods: {
-    removeTodo(todoItem, index) {
-      this.$emit('removeItem', todoItem, index);
-    },
-    toggleComplete(todoItem, index) {
-      this.$emit('toggleItem', todoItem, index);
-    }
+    ...mapMutations({
+      removeTodo: 'removeOneItem',     // 인자를 설정하지 않아도 호출하는 곳에서 인자를 넘기면 넘어감
+      toggleComplete: 'toggleOneItem'
+    })
   },
+  computed: {
+    ...mapGetters(['getTodoItems'])
+  }
 };
-</script>
+</script> 
 
 <style scoped>
 ul {
